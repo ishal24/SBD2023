@@ -3,8 +3,10 @@ Name    : Muhammad Faishal Rizqy
 
 NRP     : 5027221026
 
+
 ## database
 untuk latihan ini masih menggunakan database yang sama dengan database sebelumnya, atau jika ingin membuat database, bisa menggunakan query pada [createdb.sql](https://github.com/ishal24/SBD2023/blob/main/Tugas%20SQL%20Query%20%232/createdb.sql).
+
 
 ## 1. Tampilkan deskripsi tugas, nama mata kuliah, dan nama dosen dari tugas yang paling banyak dikerjakan oleh mahasiswa
 ```sql
@@ -67,7 +69,6 @@ Disini saya mengambil nama dosen dari ```lecturer.name_lecturer``` dan jumlah tu
 ![](img/Screenshot_2.3.png)
 Pada gambar tersebut, terlihat bahwa ada dua nama dosen yang muncul dengan jumlah tugas sebanyak 4.
 
-
 ![](img/Screenshot_2.4.png)
 Pada gambar tersebut, saya menghilangkan ```LIMIT 2``` pada query untuk menampilkan semuanya dan didapati bahwa ada dua dosen dengan posisi pertama yaitu Charlene Johnson dan Shirley Fleming. Itu mengapa saya melimit hasilnya menjadi dua baris.
 
@@ -91,6 +92,7 @@ Pada soal ini, diminta untuk menampilkan tugas memiliki nilai antara 70 sampai 8
 ![](img/Screenshot_3.png)
 Dari gambar tersebut didapat bahwa ada sepuluh tugas dengan nilai diantara 70 dan 80.
 
+
 ## 4. Tampilkan nama mahasiswa, NRP, dan nilai yang memiliki nilai dibawah rata-rata pada tugas yang memiliki kata 'car' di deskripsi
 ```sql
 SELECT
@@ -113,6 +115,7 @@ Pada soal ini diminta untuk menampilkan nama mahasiswa beserta NRP nya yang memi
 
 ![](img/Screenshot_4.png)
 Pada gambar diatas, dapat dilihat bahwa terdapat tiga mahasiswa yang memenuhi kriteria.
+
 
 ## 5. Tampilkan deskripsi tugas, nama mata kuliah, dan nama dosen dari tugas yang memiliki nilai rata-rata dibawah rata-rata nilai semua tugas
 ```sql
