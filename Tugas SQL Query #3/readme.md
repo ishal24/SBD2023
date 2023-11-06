@@ -9,16 +9,21 @@ untuk latihan ini masih menggunakan database yang sama dengan database sebelumny
 ## 1. Tampilkan deskripsi tugas, nama mata kuliah, dan nama dosen dari tugas yang paling banyak dikerjakan oleh mahasiswa
 ```sql
 SELECT
-    course.name_course AS NamaMataKuliah,
     task.desc_task AS DeskripsiTugas,
+    course.name_course AS NamaMataKuliah,
     lecturer.name_lecturer AS NamaDosen,
-    (SELECT COUNT(DISTINCT id_mhs) FROM task t WHERE t.desc_task = task.desc_task) AS JumlahMahasiswa
+    COUNT(student.id) AS JumlahMahasiswa
 FROM
     task
-JOIN course ON task.id_mk = course.id
-JOIN lecturer ON task.id_dos = lecturer.id
-GROUP BY course.name_course, task.desc_task, lecturer.name_lecturer;
+LEFT JOIN course ON task.id_mk = course.id
+LEFT JOIN lecturer ON task.id_dos = lecturer.id
+LEFT JOIN student ON task.id_mhs = student.id
+GROUP BY task.desc_task
+ORDER BY JumlahMahasiswa DESC;
 ```
+Pada soal ini, diminta untuk menampilkan tugas yang paling banyak dikerjakan oleh mahasiswa beserta nama mata kuliah dan dosennya. Disini saya mengambil deskripsi tugas dari task.desc_task, nama mata kuliah dari course dari course.name_course, dan nama dosen dari lecturer.name_lecturer.
+
+![](img/Screenshot_1.png)
 
 
 
@@ -37,7 +42,7 @@ ORDER BY JumlahTugas DESC
 LIMIT 1;
 ```
 
-Menampilkan dosen denan jenis tugas terbanyak
+Menampilkan dosen dengan jenis tugas terbanyak
 ```sql
 SELECT
     lecturer.name_lecturer AS NamaDosen,
