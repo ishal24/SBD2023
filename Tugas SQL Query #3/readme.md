@@ -21,8 +21,8 @@ LEFT JOIN student ON task.id_mhs = student.id
 GROUP BY task.desc_task
 ORDER BY JumlahMahasiswa DESC;
 ```
-Pada soal ini, diminta untuk menampilkan tugas yang paling banyak dikerjakan oleh mahasiswa beserta nama mata kuliah dan dosennya. Disini saya mengambil deskripsi tugas dari task.desc_task, nama mata kuliah dari course dari course.name_course, dan nama dosen dari lecturer.name_lecturer. Saya juga menambahkan kolom JumlahMahasiswa untuk mengetahui berapa banyak mahasiswa yang mengambil tugas tersebut dengan COUNT(student.id).
-Lalu saya menggunakan LEFT JOIN pada course.id, lecturer.id, dan student.id, yang cocok dengan id yang ada di task. Kemudian saya menggunakan grouping dengan task.desc_tesk. Selanjutnya melakukan sorting berdasarkan JumlahMahasiswa.
+Pada soal ini, diminta untuk menampilkan tugas yang paling banyak dikerjakan oleh mahasiswa beserta nama mata kuliah dan dosennya. Disini saya mengambil deskripsi tugas dari ```task.desc_task```, nama mata kuliah dari ```course.name_course```, dan nama dosen dari ```lecturer.name_lecturer```. Saya juga menambahkan kolom JumlahMahasiswa untuk mengetahui berapa banyak mahasiswa yang mengambil tugas tersebut dengan ```COUNT(student.id)```.
+Lalu saya menggunakan ```LEFT JOIN``` pada ```course.id```, ```lecturer.id```, dan ```student.id```, yang cocok dengan id yang ada di task. Kemudian saya menggunakan grouping dengan task.desc_tesk. Selanjutnya melakukan sorting berdasarkan JumlahMahasiswa.
 
 ![](img/Screenshot_1.png)
 Dari gambar diatas, didapat 100 baris dengan Jumlah Mahasiswa terbanyak yang mengerjakan tugas adalah 1 dan semua baris menampilkan jumlah yang sama.
@@ -81,12 +81,15 @@ SELECT
     task.score AS NilaiTugas
 FROM
     task
-JOIN course ON task.id_mk = course.id
-JOIN lecturer ON task.id_dos = lecturer.id
-WHERE
-    task.score BETWEEN 70 AND 80;
+LEFT JOIN course ON task.id_mk = course.id
+LEFT JOIN lecturer ON task.id_dos = lecturer.id
+WHERE task.score BETWEEN 70 AND 80
+ORDER BY task.score ASC;
 ```
+Pada soal ini, diminta untuk menampilkan tugas memiliki nilai antara 70 sampai 80 beserta nama mata kuliah dan nama dosennya. Disini saya mengambil deskripsi tugas dari ```task.desc_task```, nama mata kuliah dari ```course.name_course```, nama dosen dari ```lecturer.name_lecturer```, dan nilai tugas dari ```task.score```. Lalu saya menggunakan ```LEFT JOIN``` pada ```course.id``` dan ```lecturer.id``` yang cocok dengan id yang ada di task. Kemudian saya memfilter hasilnya menggunakan ```WHERE task.score BETWEEN 70 AND 80``` dimana hanya akan menampilkan yang nilai scorenya antara 70 dan 80. Kemudian saya mensorting hasilnya berdasarkan nilai tugasnya.
 
+![](img/Screenshot_3.png)
+Dari gambar tersebut didapat bahwa ada sepuluh tugas dengan nilai diantara 70 dan 80.
 
 ## 4. Tampilkan nama mahasiswa, NRP, dan nilai yang memiliki nilai dibawah rata-rata pada tugas yang memiliki kata 'car' di deskripsi
 ```sql
@@ -97,7 +100,7 @@ SELECT
     task.score AS Nilai
 FROM
     task
-JOIN student ON task.id_mhs = student.id
+LEFT JOIN student ON task.id_mhs = student.id
 WHERE
     task.desc_task LIKE '%car%'
     AND task.score < (
@@ -106,7 +109,10 @@ WHERE
         WHERE desc_task LIKE '%car%'
     );
 ```
+Pada soal ini diminta untuk menampilkan nama mahasiswa beserta NRP nya yang memiliki nilai dibawah rata-rata pada tugas yang memiliki kata 'car' pada deskripsinya. Disini saya mengambil nama mahasiswa dari ```student.name_student```, NRP dari ```student.nrp```, deskripsi tugas dari ```task.desc_task```, dan nilai dari ```task.score```. Kemudian saya melakukan ```LEFT JOIN``` pada ```student.id``` yang cocok dengan id pada task. Lalu saya memfilter hasil menggunakan ```WHERE```. Dalam ```WHERE``` tersebut, saya menggunakan ```task.desc_task LIKE '%car%'``` untuk hanya menampilkan yang terdapat 'car' pada deskripsi tugas.  Kemudian menggunakan ```AND task.score < (SELECT AVG(score) FROM task WHERE desc_task LIKE '%car%')``` untuk hanya menampilkan hasil yang scorenya dibawah dari rata-rata score.
 
+![](img/Screenshot_4.png)
+Pada gambar diatas, dapat dilihat bahwa terdapat tiga mahasiswa yang memenuhi kriteria.
 
 ## 5. Tampilkan deskripsi tugas, nama mata kuliah, dan nama dosen dari tugas yang memiliki nilai rata-rata dibawah rata-rata nilai semua tugas
 ```sql
@@ -114,12 +120,16 @@ SELECT
     task.desc_task AS DeskripsiTugas,
     course.name_course AS NamaMataKuliah,
     lecturer.name_lecturer AS NamaDosen,
-    AVG(task.score) AS RataRataNilai
+    ROUND(AVG(task.score)) AS RataRataNilai
 FROM
     task
-JOIN course ON task.id_mk = course.id
-JOIN lecturer ON task.id_dos = lecturer.id
-GROUP BY task.desc_task, course.name_course, lecturer.name_lecturer
-HAVING AVG(task.score) < (SELECT AVG(score) FROM task);
+LEFT JOIN course ON task.id_mk = course.id
+LEFT JOIN lecturer ON task.id_dos = lecturer.id
+GROUP BY task.desc_task
+HAVING AVG(task.score) < (SELECT AVG(score) FROM task)
+ORDER BY task.score;
 ```
+Pada soal ini, diminta untuk menampilkan tugas yang  memiliki nilai rata-rata dibawah rata-rata nilai semua tugas beserta nama mata kuliah dan dosennya. Disini saya mengambil deskripsi tugas dari ```task.desc_task```, nama mata kuliah dari ```course.name_course```, dan nama dosen dari ```lecturer.name_lecturer```. Saya juga menambahkan kolom RataRataNilai untuk mengetahui nilai dari tugas tersebut. Untuk rata rata nilainya, saya menggunakan ```AVG(task.score)``` untuk menghitungnya dan menggunakan ```ROUND()``` untuk membulatkan hasilnya. Lalu saya menggunakan ```LEFT JOIN``` pada ```course.id``` dan ```lecturer.id``` yang cocok dengan id yang ada di task. Kemudian saya menggunakan grouping dengan task.desc_tesk. Lalu saya menggunakan ```HAVING``` untuk memfilter hasil pada group. ```AVG(task.score) < (SELECT AVG(score) FROM task)``` pada ```HAVING``` artinya memvilter rata-rata task.score yang kurang dari rata-rata score.Terakhir, saya melakukan sorting berdasarkan rata-rata nilai. 
 
+![](img/Screenshot_5.png)
+Pada gambar tersebut, didapat bahwa ada 50 tugas yang memiliki nilai dibawah rata-rata.
